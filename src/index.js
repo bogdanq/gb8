@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider, createTheme } from "@mui/material";
-import { MessageList } from "./components";
+import { MessageList, Layout, Header, ChatList } from "./components";
+import "./global.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -9,17 +10,17 @@ const theme = createTheme({
   myPalette: {
     color: "red",
   },
-  palette: {
-    // primary: {
-    //   // main: "#ff0000",
-    // },
-  },
+  palette: {},
 });
 
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <MessageList />
+      <Layout
+        messages={<MessageList />}
+        header={<Header />}
+        chats={<ChatList />}
+      />
     </ThemeProvider>
   </React.StrictMode>
 );
