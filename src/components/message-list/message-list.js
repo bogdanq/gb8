@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useParams } from "react-router-dom";
 // import PropTypes from "prop-types";
 import { Input, InputAdornment } from "@mui/material";
 import styled from "@emotion/styled";
@@ -23,9 +24,22 @@ const getBotMessage = () => ({
   date: new Date(),
 });
 
+const getBotAnswer = (message) => {
+  const answers = {
+    0: "00000",
+    1: "11111",
+  };
+
+  return answers[message] || "not found answer";
+};
+
 export const MessageList = () => {
+  const { roomId } = useParams();
+
   const [value, setValue] = useState("");
-  const [messages, setMessages] = useState([getBotMessage()]);
+  const [messageList, setMessageList] = useState({
+    room1: [getBotMessage()],
+  });
 
   const ref = useRef();
 
@@ -33,38 +47,47 @@ export const MessageList = () => {
     if (ref.current) {
       ref.current.scrollTo(0, ref.current.scrollHeight);
     }
-  }, [messages]);
+  }, [messageList]);
+
+  const sendMessage = useCallback(
+    (message, author = "User") => {
+      if (message) {
+        setMessageList((state) => ({
+          ...state,
+          [roomId]: [
+            ...(state[roomId] ?? []),
+            { author, message, date: new Date() },
+          ],
+        }));
+        setValue("");
+      }
+    },
+    [roomId]
+  );
 
   useEffect(() => {
+    const messages = messageList[roomId] ?? [];
     const lastMessage = messages[messages.length - 1];
     let timerId = null;
 
     if (messages.length && lastMessage?.author === "User") {
       timerId = setTimeout(() => {
-        setMessages([...messages, getBotMessage()]);
+        sendMessage(getBotAnswer(lastMessage.message), "Bot");
       }, 500);
     }
 
     return () => {
       clearInterval(timerId);
     };
-  }, [messages]);
-
-  const sendMessage = () => {
-    if (value) {
-      setMessages([
-        ...messages,
-        { author: "User", message: value, date: new Date() },
-      ]);
-      setValue("");
-    }
-  };
+  }, [sendMessage, messageList, roomId]);
 
   const handlePressInput = ({ code }) => {
     if (code === "Enter") {
-      sendMessage();
+      sendMessage(value);
     }
   };
+
+  const messages = messageList[roomId] ?? [];
 
   return (
     <>
@@ -82,7 +105,7 @@ export const MessageList = () => {
         fullWidth={true}
         endAdornment={
           <InputAdornment position="end">
-            {value && <IconStyles onClick={sendMessage} />}
+            {value && <IconStyles onClick={() => sendMessage(value)} />}
           </InputAdornment>
         }
       />
