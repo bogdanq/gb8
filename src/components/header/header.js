@@ -1,4 +1,6 @@
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { ThemeContext } from "../../theme-context";
 import styles from "./header.module.css";
 
 const menu = [
@@ -8,9 +10,15 @@ const menu = [
 ];
 
 export function Header() {
+  const { theme, themeSetter } = useContext(ThemeContext);
+
   return (
     <div className={styles.header}>
-      <h1>header</h1>
+      <h1>
+        header :: {theme.name} ::
+        <span onClick={() => themeSetter("dark")}>dark</span> :_____:
+        <span onClick={() => themeSetter("light")}>light</span>
+      </h1>
 
       <ul style={{ display: "flex" }}>
         {menu.map((item) => (

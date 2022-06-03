@@ -5,7 +5,9 @@ import styles from "./chat.module.css";
 
 const ListItemStyles = styled(ListItem)`
   &.Mui-selected {
-    background-color: #2b5278;
+    background-color: ${(ctx) => {
+      return "#2b5278";
+    }};
   }
   &.Mui-selected:hover {
     background-color: #2b5278;
