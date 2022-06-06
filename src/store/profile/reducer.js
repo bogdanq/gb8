@@ -1,4 +1,4 @@
-import { TOGGLE_VISIBLE_PROFILE } from "./types";
+import { TOGGLE_VISIBLE_PROFILE, UPDATE_PROFILE } from "./types";
 
 const initialState = {
   firstName: "firstName",
@@ -12,6 +12,11 @@ export const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         isVisibleProfile: !state.isVisibleProfile,
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        ...action.payload,
       };
     default:
       return state;
