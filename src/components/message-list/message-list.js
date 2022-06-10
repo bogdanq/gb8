@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Input, InputAdornment } from "@mui/material";
 import styled from "@emotion/styled";
 import { Send } from "@mui/icons-material";
-import { sendMessage, messagesSelector } from "../../store/messages";
+import { sendMessageWithBot, messagesSelector } from "../../store/messages";
 import { Message } from "./message";
 
 const InputStyles = styled(Input)`
@@ -62,7 +62,7 @@ export const MessageList = () => {
   const send = useCallback(
     (message, author = "User") => {
       if (message) {
-        dispatch(sendMessage(roomId, { message, author }));
+        dispatch(sendMessageWithBot(roomId, { message, author }));
         setValue("");
       }
     },

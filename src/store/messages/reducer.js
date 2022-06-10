@@ -8,13 +8,13 @@ const initialState = {
       {
         author: "Bot",
         message: "Hello from bot",
-        date: new Date(),
+        date: new Date().getTime(),
         id: nanoid(),
       },
       {
         author: "User",
         message: "Hello from bot 2",
-        date: new Date(),
+        date: new Date().getTime(),
         id: nanoid(),
       },
     ],
@@ -30,7 +30,11 @@ export const messagesReducer = (state = initialState, action) => {
           ...state.messages,
           [action.payload.roomId]: [
             ...(state.messages[action.payload.roomId] ?? []),
-            { ...action.payload.message, id: nanoid(), date: new Date() },
+            {
+              ...action.payload.message,
+              id: nanoid(),
+              date: new Date().getTime(),
+            },
           ],
         },
       };

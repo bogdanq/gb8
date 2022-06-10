@@ -9,4 +9,7 @@ export const createConversation = (conversation) => ({
 export const deleteConversation = (conversation) => ({
   type: DELETE_CONVERSATION,
   payload: conversation,
+  // meta: {
+  //   delay: 5000,
+  // },
 });
