@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { Button } from "@mui/material";
 import { format } from "date-fns";
 import { useDispatch } from "react-redux";
 import { deleteMessage } from "../../../store/messages";
@@ -17,9 +18,9 @@ export function Message({ message, roomId }) {
       <p>{message.author}</p>
       <p>{format(message?.date, "yyyy-MM-dd HH:mm:ss")}</p>
 
-      <button onClick={() => dispatch(deleteMessage(roomId, message.id))}>
+      <Button color="info" onClick={() => dispatch(deleteMessage(roomId, message.id))}>
         x
-      </button>
+      </Button>
     </div>
   );
 }

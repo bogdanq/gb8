@@ -1,9 +1,19 @@
-import { NavLink } from "react-router-dom";
 import { useContext } from "react";
-import { ThemeContext } from "../../theme-context";
+import { Link } from "react-router-dom";
+import {
+  Button,
+  Avatar,
+  Container,
+  Typography,
+  IconButton,
+  Toolbar,
+  Box,
+  AppBar,
+} from "@mui/material";
 import styles from "./header.module.css";
+import { ThemeContext } from "../../theme-context";
 
-const menu = [
+const pages = [
   { title: "Home", to: "/" },
   { title: "Chat", to: "/chat" },
   { title: "Profile", to: "/profile" },
@@ -11,23 +21,54 @@ const menu = [
 ];
 
 export function Header() {
-  const { theme, themeSetter } = useContext(ThemeContext);
+  const { themeSetter, theme } = useContext(ThemeContext);
 
   return (
-    <div className={styles.header}>
-      <h1>
-        header :: {theme.name} ::
-        <span onClick={() => themeSetter("dark")}>dark</span> :_____:
-        <span onClick={() => themeSetter("light")}>light</span>
-      </h1>
+    <AppBar position="static" color="primary" className={styles.appBar}>
+      <Container maxWidth="xl">
+        <Button
+          onClick={() => themeSetter("light")}
+          style={{ color: theme.theme.color }}
+        >
+          light
+        </Button>
+        <Button
+          onClick={() => themeSetter("dark")}
+          style={{ color: theme.theme.color }}
+        >
+          dark
+        </Button>
+        <hr />
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ mr: 2, display: { xs: "flex", md: "flex" } }}
+          >
+            LOGO
+          </Typography>
 
-      <ul style={{ display: "flex" }}>
-        {menu.map((item) => (
-          <li key={item.title}>
-            <NavLink to={item.to}>{item.title}</NavLink>
-          </li>
-        ))}
-      </ul>
-    </div>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
+            {pages.map(({ to, title }) => (
+              <Button
+                key={title}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                <Link className={styles.link} to={to}>
+                  {title}
+                </Link>
+              </Button>
+            ))}
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <IconButton sx={{ p: 0 }}>
+              <Avatar />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }

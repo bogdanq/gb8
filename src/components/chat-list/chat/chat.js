@@ -1,4 +1,4 @@
-import { ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { ListItem, ListItemIcon, ListItemText, Button } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import styled from "@emotion/styled";
@@ -25,7 +25,7 @@ export function Chat({ title, selected, deleteConversationByName }) {
   return (
     <ListItemStyles className={styles.item} button={true} selected={selected}>
       <ListItemIcon>
-        <button onClick={(e) => deleteConversationByName(title, e)}>X</button>
+        <Button color="info" onClick={(e) => deleteConversationByName(title, e)}>x</Button>
         <AccountCircle fontSize="large" className={styles.icon} />
       </ListItemIcon>
       <div className={styles.description}>

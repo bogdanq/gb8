@@ -1,4 +1,4 @@
-import { List } from "@mui/material";
+import { List, Button } from "@mui/material";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -39,7 +39,7 @@ export const ChatList = () => {
 
   return (
     <List component="nav">
-      <button onClick={createConversationByName}>create room</button>
+      <Button color="info" onClick={createConversationByName}>create room</Button>
 
       {conversations.map((chat) => (
         <Link key={chat} to={`/chat/${chat}`}>

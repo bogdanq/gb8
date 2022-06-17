@@ -1,8 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGists } from "../store/gists";
+import debounce from "lodash.debounce";
+import { getGists, getGistsByName } from "../store/gists";
+
+const searchGistsDebounced = debounce((query, dispatch) => {
+  dispatch(getGistsByName(query));
+}, 1000);
 
 export const GistsPage = () => {
+  const [value, setValue] = useState("");
   // const [gists, setGists] = useState([]);
   // const [error, setError] = useState(null);
   // const [isLoading, setIsLoading] = useState(false);
@@ -31,49 +37,79 @@ export const GistsPage = () => {
   // }, []);
 
   const dispatch = useDispatch();
-  const { gists, error, pending } = useSelector((state) => state.gists);
+  const { gists, error, pending, gistsByName, pendingByName, errorByName } =
+    useSelector((state) => state.gists);
 
   useEffect(() => {
     dispatch(getGists());
   }, [dispatch]);
 
-  if (error) {
-    return (
-      <div>
-        <h1>error !!!!</h1>
-      </div>
-    );
+  useEffect(() => {
+    if (!!value) {
+      searchGistsDebounced(value, dispatch);
+    }
+  }, [value, dispatch]);
+
+  if (error || errorByName) {
+    return <div>Error !!</div>;
   }
 
-  if (pending) {
-    return (
-      <div>
-        <h1>isLoading ....</h1>
-      </div>
-    );
-  }
+  console.log("errorByName", errorByName);
 
   return (
     <div>
       <h1>Gists page</h1>
-      {Array.from({ length: 10 })
-        .map((_, index) => index + 1)
-        .map((item) => (
-          <button onClick={() => dispatch(getGists(item))} key={item}>
-            {item}
-          </button>
-        ))}
 
-      {gists.map((gist, index) => (
-        <div key={index}>
-          <h2>
-            {gist.description || (
-              <span style={{ fontWeight: "bold" }}>no description</span>
-            )}
-          </h2>
-          <hr />
+      <div style={{ display: "flex" }}>
+        <div>
+          {pending ? (
+            <h1>pending ...</h1>
+          ) : (
+            <div>
+              {Array.from({ length: 10 })
+                .map((_, index) => index + 1)
+                .map((item) => (
+                  <button onClick={() => dispatch(getGists(item))} key={item}>
+                    {item}
+                  </button>
+                ))}
+              {gists.map((gist, index) => (
+                <div key={index}>
+                  <h2>
+                    {gist.description || (
+                      <span style={{ fontWeight: "bold" }}>no description</span>
+                    )}
+                  </h2>
+                  <hr />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      ))}
+
+        <div>
+          <input
+            placeholder="serarch"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+
+          {pendingByName ? (
+            <h1>pending ...</h1>
+          ) : (
+            gistsByName.map((gist, index) => (
+              <div key={index}>
+                <h2>
+                  {gist.description || (
+                    <span style={{ fontWeight: "bold" }}>no description</span>
+                  )}
+                </h2>
+                <hr />
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 };

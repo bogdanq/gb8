@@ -14,16 +14,18 @@ const themes = {
 
 const themesMUI = {
   dark: createTheme({
-    myPalette: {
-      color: "000",
+    palette: {
+      primary: {
+        main: "#2b5278",
+      },
     },
-    palette: {},
   }),
   light: createTheme({
-    myPalette: {
-      color: "fff",
+    palette: {
+      primary: {
+        main: "#17212b",
+      },
     },
-    palette: {},
   }),
 };
 
