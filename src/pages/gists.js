@@ -54,8 +54,6 @@ export const GistsPage = () => {
     return <div>Error !!</div>;
   }
 
-  console.log("errorByName", errorByName);
-
   return (
     <div>
       <h1>Gists page</h1>

@@ -13,8 +13,8 @@ export const ChatList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const conversations = useSelector(
-    (state) => state.conversations.conversations
+  const { conversations, pending } = useSelector(
+    (state) => state.conversations
   );
 
   const createConversationByName = () => {
@@ -39,17 +39,23 @@ export const ChatList = () => {
 
   return (
     <List component="nav">
-      <Button color="info" onClick={createConversationByName}>create room</Button>
+      <Button color="info" onClick={createConversationByName}>
+        create room
+      </Button>
 
-      {conversations.map((chat) => (
-        <Link key={chat} to={`/chat/${chat}`}>
-          <Chat
-            title={chat}
-            selected={roomId === chat}
-            deleteConversationByName={deleteConversationByName}
-          />
-        </Link>
-      ))}
+      {pending ? (
+        <h2>pending...</h2>
+      ) : (
+        conversations.map((chat) => (
+          <Link key={chat} to={`/chat/${chat}`}>
+            <Chat
+              title={chat}
+              selected={roomId === chat}
+              deleteConversationByName={deleteConversationByName}
+            />
+          </Link>
+        ))
+      )}
     </List>
   );
 };

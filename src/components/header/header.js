@@ -10,17 +10,24 @@ import {
   Box,
   AppBar,
 } from "@mui/material";
+import { signOut } from "firebase/auth";
 import styles from "./header.module.css";
 import { ThemeContext } from "../../theme-context";
+import { auth } from "../../api/firebase";
 
-const pages = [
-  { title: "Home", to: "/" },
+const menuWithSession = [
   { title: "Chat", to: "/chat" },
   { title: "Profile", to: "/profile" },
   { title: "Gists", to: "/gists" },
 ];
 
-export function Header() {
+const menuWithoutSession = [
+  { title: "SignUp", to: "/sign-up" },
+  { title: "Login", to: "/login" },
+  { title: "Home", to: "/" },
+];
+
+export function Header({ session }) {
   const { themeSetter, theme } = useContext(ThemeContext);
 
   return (
@@ -38,6 +45,15 @@ export function Header() {
         >
           dark
         </Button>
+
+        {!!session && (
+          <Button
+            onClick={() => signOut(auth)}
+            style={{ color: theme.theme.color }}
+          >
+            out
+          </Button>
+        )}
         <hr />
         <Toolbar disableGutters>
           <Typography
@@ -50,16 +66,29 @@ export function Header() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
-            {pages.map(({ to, title }) => (
-              <Button
-                key={title}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <Link className={styles.link} to={to}>
-                  {title}
-                </Link>
-              </Button>
-            ))}
+            {!!session &&
+              menuWithSession.map(({ to, title }) => (
+                <Button
+                  key={title}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  <Link className={styles.link} to={to}>
+                    {title}
+                  </Link>
+                </Button>
+              ))}
+
+            {!session &&
+              menuWithoutSession.map(({ to, title }) => (
+                <Button
+                  key={title}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  <Link className={styles.link} to={to}>
+                    {title}
+                  </Link>
+                </Button>
+              ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
