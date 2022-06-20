@@ -1,3 +1,4 @@
+import { DELETE_CONVERSATION } from "../types";
 import {
   getConversationsStart,
   getConversationsSuccess,
@@ -12,6 +13,7 @@ import {
 
 export const getConversations = () => async (dispatch, _, api) => {
   const conversations = [];
+
   try {
     dispatch(getConversationsStart());
 
@@ -47,6 +49,7 @@ export const deleteConversation =
 
       await api.removConversationApi(conversation);
 
+      dispatch({ type: DELETE_CONVERSATION, payload: conversation });
       dispatch(removeConversationSuccess(conversation));
     } catch (e) {
       dispatch(removeConversationError(e));
