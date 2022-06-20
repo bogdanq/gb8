@@ -8,6 +8,7 @@ import {
   createConversationApi,
   removConversationApi,
 } from "../api/conversations";
+import { createMessageApi, getMessagesApi } from "../api/messages";
 import { profileReducer } from "./profile";
 import { conversationsReducer } from "./conversations";
 import { messagesReducer } from "./messages";
@@ -25,6 +26,8 @@ const api = {
   getConversationsApi,
   createConversationApi,
   removConversationApi,
+  createMessageApi,
+  getMessagesApi,
 };
 
 const persistConfig = {
